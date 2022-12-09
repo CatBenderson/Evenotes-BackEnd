@@ -13,20 +13,23 @@ public class App {
     public static void main( String[] args ){
         Usuario uAux = new Usuario();
 
-        port(80);
+        port(getHerokuAssignedPort());
 
+        // Aqui va el CORS
         options("/*", (request, response) -> {
             String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+            System.out.println(accessControlRequestHeaders);
             if (accessControlRequestHeaders != null) {
                 response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
             }
             String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+            System.out.println(accessControlRequestMethod);
             if (accessControlRequestMethod != null) {
                 response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
             }
             return "OK";
         });
-        before((req, res) -> res.header("Access-Control-Allow-Origin", "*"));
+        before((req, res)-> res.header("Access-Control-Allow-Origin", "*"));
 
         post("/login", (req, res) -> {
             String datosFormulario = req.body();
@@ -83,6 +86,14 @@ public class App {
             String x= DAOEvento.modificaEvento(ev);
             return x;
         });
+      
+        static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 4567; // return default port if heroku-port isn't set (i.e. on localhost)
+    }
         
     }
 }
