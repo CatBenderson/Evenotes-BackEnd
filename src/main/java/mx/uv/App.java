@@ -42,8 +42,10 @@ public class App {
                 return false;
             }
         });
-
+        
+        before((req, res)-> res.header("Access-Control-Allow-Origin", "*"));
         post("/register" ,(req,res)-> {
+            System.out.println("Entra a registro");
             String datosFormulario = req.body();
             Usuario u = gson.fromJson(datosFormulario, Usuario.class);
             String x= DAO.crearUsuario(u);
@@ -52,10 +54,12 @@ public class App {
             return x;
         });
 
+        before((req, res)-> res.header("Access-Control-Allow-Origin", "*"));
         get("/main",(req,res)-> {
             return  gson.toJson(DAOEvento.dameEventos(uAux.getNombre()));
         });
 
+        before((req, res)-> res.header("Access-Control-Allow-Origin", "*"));
         post("/mainBM",(req,res)-> {
             String datosEvento = req.body();
             Evento ev = gson.fromJson(datosEvento, Evento.class);
@@ -63,6 +67,7 @@ public class App {
             return gson.toJson(DAOEvento.dameEvento(uAux.getNombre(), ev.getTitulo()));
         });
 
+        before((req, res)-> res.header("Access-Control-Allow-Origin", "*"));
         post("/main" ,(req,res)-> {
             String datosEvento = req.body();
             Evento ev = gson.fromJson(datosEvento, Evento.class);
@@ -71,6 +76,7 @@ public class App {
             return x;
         });
 
+        before((req, res)-> res.header("Access-Control-Allow-Origin", "*"));
         post("/mainD" ,(req,res)-> {
             String datosEvento = req.body();
             Evento ev = gson.fromJson(datosEvento, Evento.class);
@@ -78,7 +84,8 @@ public class App {
             String x= DAOEvento.borraEvento(ev.getTitulo());
             return x;
         });
-        
+
+        before((req, res)-> res.header("Access-Control-Allow-Origin", "*"));
         post("/mainM" ,(req,res)-> {
             String datosEvento = req.body();
             Evento ev = gson.fromJson(datosEvento, Evento.class);
